@@ -3,6 +3,36 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+#np array probably better for getting the median, etc...
+h_data = np.loadtxt("humidity_24hr.txt", usecols=(3,4,5,6,7,8,9,10),skiprows=8)
+h_time = np.loadtxt("humidity_24hr.txt", usecols=0,skiprows=8)
+
+h_median = np.median(h_data,axis=1)
+h_offsets_1 = h_data[:,0]-h_median
+h_offsets_2 = h_data[:,1]-h_median
+h_offsets_3 = h_data[:,2]-h_median
+h_offsets_4 = h_data[:,3]-h_median
+h_offsets_5 = h_data[:,4]-h_median
+h_offsets_6 = h_data[:,5]-h_median
+h_offsets_7 = h_data[:,6]-h_median
+h_offsets_8 = h_data[:,7]-h_median
+
+#plt.plot(h_time,h_median,label='median',alpha=.5)
+plt.plot(h_time,h_offsets_1,label='ant1',lw=0.5)
+plt.plot(h_time,h_offsets_2,label='ant2',lw=0.5)
+#plt.plot(h_time,h_offsets_3,label='ant3',lw=0.5)
+#plt.plot(h_time,h_offsets_4,label='ant4',lw=0.5)
+plt.plot(h_time,h_offsets_5,label='ant5',lw=0.5)
+plt.plot(h_time,h_offsets_6,label='ant6',lw=0.5)
+plt.plot(h_time,h_offsets_7,label='ant7',lw=0.5)
+plt.plot(h_time,h_offsets_8,label='ant8',lw=0.5)
+plt.legend()
+plt.xlim(right=1633449840)          #unixtime of ~6am
+plt.ylim(-20,20)
+plt.title("Humidity Offsets")
+plt.show()
+
+'''
 #get the data
 cols = ['unixtime','UTC','HST','ant1','ant2','ant3','ant4','ant5','ant6','ant7','ant8']
 t = pd.read_table("temp_24hr.txt",sep='\s+',skiprows=10,names=cols)
@@ -17,7 +47,7 @@ h = h[h['unixtime'] <= 1633449840]
 ref = 'ant6'
 
 #just working with temperature for now
-'''
+
 plt.plot(t['unixtime'],t['ant1'],lw=.5)
 plt.plot(t['unixtime'],t['ant2'],lw=.5)
 #plt.plot(t['unixtime'],t['ant3'],lw=.5)    #in hangar
@@ -27,7 +57,7 @@ plt.plot(t['unixtime'],t['ant6'],lw=.5)
 plt.plot(t['unixtime'],t['ant7'],lw=.5)
 plt.plot(t['unixtime'],t['ant8'],lw=.5)
 plt.show()
-'''
+
 
 t_offsets = np.array([t['unixtime'].values,
                    (t['ant1']-t[ref]).values,
@@ -41,7 +71,7 @@ t_offsets = np.array([t['unixtime'].values,
 
 #print(len(diff1.values))
 #print(t['unixtime'])
-'''
+
 plt.plot(t_offsets[0],t_offsets[1],lw=.5)
 plt.plot(t_offsets[0],t_offsets[2],lw=.5)
 #plt.plot(t_offsets[0],t_offsets[3],lw=.5)      #in hangar
@@ -51,7 +81,7 @@ plt.plot(t_offsets[0],t_offsets[5],lw=.5)
 plt.plot(t_offsets[0],t_offsets[7],lw=.5)
 plt.plot(t_offsets[0],t_offsets[8],lw=.5)
 plt.show()
-'''
+
 #print(t_offsets)
 
 
@@ -117,3 +147,4 @@ plt.plot(h_offsets[0],h_offsets[7],lw=.5)
 plt.plot(h_offsets[0],h_offsets[8],lw=.5)
 plt.show()
 
+'''
