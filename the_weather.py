@@ -29,7 +29,7 @@ def get_median_offsets(f_name, ant_list, weather_type):
         temp_time = time[i:j]
         '''
         for ant in range(0,n):
-            plt.plot(temp_time,temp_data[:,ant],'.',label=str(good_ants[ant]),lw=0.5)
+            plt.plot(temp_time,temp_data[:,ant],label=str(good_ants[ant]),lw=0.5)
         plt.title("day "+str(day))
         plt.legend(fontsize='x-small')
         plt.show()
@@ -80,7 +80,23 @@ def get_median_offsets(f_name, ant_list, weather_type):
     #print(final_medians)
 ###############################################
 
+ants = [1,2,3,4,5,7,8]
 
+#apr 1-30 2020
+#get_median_offsets("EX_Apr2020_h.txt",ants,"H")
+#get_median_offsets("EX_Apr2020_p.txt",ants,"P")
+#get_median_offsets("EX_Apr2020_t.txt",ants,"T")
+
+#may 1-31 2020
+#get_median_offsets("EX_May2020_h.txt",ants,"H")
+#get_median_offsets("EX_May2020_p.txt",ants,"P")
+#get_median_offsets("EX_May2020_t.txt",ants,"T")
+
+ants = [1,2,3,4,7,8]       #6 in the hangar
+get_median_offsets("VEX_Feb2015_h.txt",ants,"H")
+get_median_offsets("VEX_Feb2015_p.txt",ants,"P")
+get_median_offsets("VEX_Feb2015_t.txt",ants,"T")
+'''
 ants = [1,2,3,4,5,7,8]      #6's humidity is always off
 
 #nov 1-30 2020
@@ -117,4 +133,4 @@ get_median_offsets("SC_Sep2021_t.txt",ants,"T")
 #get_median_offsets("pressure_1wk.txt",ants,"P")
 #get_median_offsets("temp_1wk.txt",ants,"T")
 
-
+'''
