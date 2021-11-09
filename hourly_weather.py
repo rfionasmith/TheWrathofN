@@ -8,13 +8,13 @@ Created on Fri Oct 29 16:18:35 2021
 import numpy as np
 import matplotlib.pyplot as plt
 
-f_name = "SC_Nov2020_p.txt"
+f_name = "VEX_Feb2015_t.txt"
 
 data = np.loadtxt(f_name,usecols=(3,4,5,6,7,8,9,10,11),skiprows=8)
 time = np.loadtxt(f_name,usecols=0,skiprows=8)
 time = np.mod(time,86400)/3600
 
-good_ants = np.array([1,2,3,4,5,6,7,8])
+good_ants = np.array([1,2,3,4,5,7,8])
 n = len(good_ants)
 data = data[:,good_ants]
 
@@ -61,7 +61,7 @@ for hr in range(0,24):
     print('-----') 
 print(final_result)
 for i in range(0,n):
-    plt.plot(final_result[:,i],label=good_ants[i])
+    plt.plot(final_result[:,i],'.',label=good_ants[i])
 plt.xlabel('UTC hour')
 plt.ylabel('Offset each hr over the month')
 plt.legend(fontsize='x-small')
