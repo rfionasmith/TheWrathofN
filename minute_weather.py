@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-f_name = "VEX_Feb2015_t.txt"
+f_name = "VEX_Feb2015_h.txt"
 
 data = np.loadtxt(f_name,usecols=(3,4,5,6,7,8,9,10,11),skiprows=8) #add 11 for all other files
 time = np.loadtxt(f_name,usecols=0,skiprows=8)
@@ -24,25 +24,36 @@ for i in range(1,9):
             continue
         antA = data[night_mask,i]
         antB = data[night_mask,j]
-
-        plt.hist2d(antA,antB,bins=201,range=[[-10.05,10.05],[-10.05,10.05]],cmap=plt.cm.plasma)
-        x=np.linspace(-10,10,201)
-
+        
+        if 't.txt' in f_name:
+            plt.hist2d(antA,antB,bins=201,range=[[-10.05,10.05],[-10.05,10.05]],cmap=plt.cm.plasma)
+            x=np.linspace(-10,10,201)
+            plt.xlabel("Temperature (degC) of Ant "+str(i),fontsize='xx-small')
+            plt.ylabel("Temperature (degC) of Ant "+str(j),fontsize='xx-small')
+        elif 'h.txt' in f_name:
+            plt.hist2d(antA,antB,bins=96,range=[[-0.5,95.5],[-0.5,95.5]],cmap=plt.cm.plasma)
+            x=np.linspace(0,95,96)           
+            plt.xlabel("% Humidity of Ant "+str(i),fontsize='xx-small')
+            plt.ylabel("% Humidity of Ant "+str(j),fontsize='xx-small')            
+        elif 'p.txt' in f_name:
+            plt.hist2d(antA,antB,bins=161,range=[[616.95,633.05],[616.95,633.05]],cmap=plt.cm.plasma)
+            x=np.linspace(617,633,161)
+            plt.xlabel("Pressure (mbar) of Ant "+str(i),fontsize='xx-small')
+            plt.ylabel("Pressure (mbar) of Ant "+str(j),fontsize='xx-small')
+            
         z = np.polyfit(antA,antB,1)
         p = np.poly1d(z)
 
         off_fit = antB - p(antA)
         lower = np.percentile(off_fit,15.866)
         upper = np.percentile(off_fit,84.134)
-        print(lower,upper)
+        print(i,'vs',j,lower,upper)
         
         plt.plot(x,p(x),'-y',lw=0.5)
         plt.plot(x,p(x)-abs(lower),'--y',lw=0.5)
         plt.plot(x,p(x)+abs(upper),'--y',lw=0.5)
         
         plt.title("VEX Feb 2015 "+str(i)+" vs "+str(j))
-        plt.xlabel("Temperature (degC) of Ant "+str(i),fontsize='xx-small')
-        plt.ylabel("Temperature (degC) of Ant "+str(j),fontsize='xx-small')
         plt.xticks(fontsize='xx-small')
         plt.yticks(fontsize='xx-small')
         
