@@ -10,6 +10,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 month = 'SC_Dec2020'
+enu = np.loadtxt('enu_dist/SUB_NovDec_2020.txt', delimiter=',')
+bad_ants = [6]
 
 col_names = ['Unixtime','1','2','3','4','5','6','7','8']
 t_df = pd.read_csv(month+'_t.txt',names=col_names,usecols=[0,4,5,6,7,8,9,10,11],skiprows=10,delim_whitespace=True)
@@ -145,17 +147,18 @@ print(std_devs)
 
 ########################### getting the baselines
 
-enu = np.loadtxt('enu_dist/SUB_NovDec_2020.txt', delimiter=',')
+#enu = np.loadtxt('enu_dist/SUB_NovDec_2020.txt', delimiter=',')
 #baseline = np.loadtxt('baselines/SUB_NovDec_2020.txt', delimiter=',')
 #baseline = np.sort(baseline.view('f8,f8,f8,f8,f8'),order=['f0','f1'],axis=0).view(float)
 
 #plt.plot(baseline[:,4],std_devs['h'],'.r')
 #plt.title('Width vs. Baseline (Temp)')
 #plt.show()
-
-flagged = np.logical_or(enu[:,0]==6,enu[:,1]==6)
-enu = enu[~flagged]
-std_devs = std_devs[~flagged]
+#bad_ants = [5,6]
+for ant in bad_ants:
+    flag = np.logical_or(enu[:,0]==ant,enu[:,1]==ant)
+    enu = enu[~flag]
+    std_devs = std_devs[~flag]
 
 ### e = 2, n = 3, u = 4
 plt.subplot(2,3,1)
