@@ -31,6 +31,8 @@ time = np.mod(time,86400)/3600
 
 night_mask = np.logical_and(time>4,time<16)
 
+std_devs = pd.DataFrame(columns = ['AntA','AntB','t','p','h'])
+row = 0
 for idx in range(1,9):
     for jdx in range (idx+1,9):
         A = idx
@@ -62,20 +64,20 @@ for idx in range(1,9):
         upper = np.percentile(t_off,84.134)
         t_sigma = (upper-lower)/2.
         
-        plt.hist2d(tA,tB,bins=201,range=[[-10.05,10.05],[-10.05,10.05]],cmap=plt.cm.plasma)
-        plt.plot(x,P(x),'-y',lw=0.5)
-        plt.plot(x,P(x)+lower,'--y',lw=0.5)
-        plt.plot(x,P(x)+upper,'--y',lw=0.5)
+        #plt.hist2d(tA,tB,bins=201,range=[[-10.05,10.05],[-10.05,10.05]],cmap=#plt.cm.plasma)
+        #plt.plot(x,P(x),'-y',lw=0.5)
+        #plt.plot(x,P(x)+lower,'--y',lw=0.5)
+        #plt.plot(x,P(x)+upper,'--y',lw=0.5)
         
         text = '$\sigma = %.3f ^\circ$C' % t_sigma
-        plt.text(9.5,-8.5,text,c='w',horizontalalignment='right')
-        plt.text(9.5,-9.5,P,c='w',horizontalalignment='right')
+        #plt.text(9.5,-8.5,text,c='w',horizontalalignment='right')
+        #plt.text(9.5,-9.5,P,c='w',horizontalalignment='right')
         
-        plt.title(month+' '+str(A)+'-'+str(B))
-        plt.xlabel("Temperature ($^\circ$C) of Ant "+str(A),fontsize='x-small')
-        plt.ylabel("Temperature ($^\circ$C) of Ant "+str(B),fontsize='x-small')
+        #plt.title(month+' '+str(A)+'-'+str(B))
+        #plt.xlabel("Temperature ($^\circ$C) of Ant "+str(A),fontsize='x-small')
+        #plt.ylabel("Temperature ($^\circ$C) of Ant "+str(B),fontsize='x-small')
 
-        plt.show()
+        #plt.show()
         
         ### pressure index 1
         pA = antA[:,1]
@@ -92,20 +94,20 @@ for idx in range(1,9):
         upper = np.percentile(p_off,84.134)
         p_sigma = (upper-lower)/2.
         
-        plt.hist2d(pA,pB,bins=161,range=[[616.95,633.05],[616.95,633.05]],cmap=plt.cm.plasma)
-        plt.plot(x,P(x),'-y',lw=0.5)
-        plt.plot(x,P(x)+lower,'--y',lw=0.5)
-        plt.plot(x,P(x)+upper,'--y',lw=0.5)
+        #plt.hist2d(pA,pB,bins=161,range=[[616.95,633.05],[616.95,633.05]],cmap=#plt.cm.plasma)
+        #plt.plot(x,P(x),'-y',lw=0.5)
+        #plt.plot(x,P(x)+lower,'--y',lw=0.5)
+        #plt.plot(x,P(x)+upper,'--y',lw=0.5)
         
         text = '$\sigma = %.3f$ mbar' % p_sigma
-        plt.text(632.3,618.2,text,c='w',horizontalalignment='right')
-        plt.text(632.3,617.4,P,c='w',horizontalalignment='right')
+        #plt.text(632.3,618.2,text,c='w',horizontalalignment='right')
+        #plt.text(632.3,617.4,P,c='w',horizontalalignment='right')
         
-        plt.title(month+' '+str(A)+'-'+str(B))
-        plt.xlabel("Pressure (mbar) of Ant "+str(A),fontsize='x-small')
-        plt.ylabel("Pressure (mbar) of Ant "+str(B),fontsize='x-small')
+        #plt.title(month+' '+str(A)+'-'+str(B))
+        #plt.xlabel("Pressure (mbar) of Ant "+str(A),fontsize='x-small')
+        #plt.ylabel("Pressure (mbar) of Ant "+str(B),fontsize='x-small')
 
-        plt.show()
+        #plt.show()
         
         ### humidity index 2
         hA = antA[:,2]
@@ -122,17 +124,156 @@ for idx in range(1,9):
         upper = np.percentile(h_off,84.134)
         h_sigma = (upper-lower)/2.
         
-        plt.hist2d(hA,hB,bins=96,range=[[-0.5,95.5],[-0.5,95.5]],cmap=plt.cm.plasma)
-        plt.plot(x,P(x),'-y',lw=0.5)
-        plt.plot(x,P(x)+lower,'--y',lw=0.5)
-        plt.plot(x,P(x)+upper,'--y',lw=0.5)
+        #plt.hist2d(hA,hB,bins=96,range=[[-0.5,95.5],[-0.5,95.5]],cmap=#plt.cm.plasma)
+        #plt.plot(x,P(x),'-y',lw=0.5)
+        #plt.plot(x,P(x)+lower,'--y',lw=0.5)
+        #plt.plot(x,P(x)+upper,'--y',lw=0.5)
         
         text = ('$\sigma = %.3f$' % h_sigma)+' %'
-        plt.text(94.5,5.5,text,c='w',horizontalalignment='right')
-        plt.text(94.5,1.5,P,c='w',horizontalalignment='right')
+        #plt.text(94.5,5.5,text,c='w',horizontalalignment='right')
+        #plt.text(94.5,1.5,P,c='w',horizontalalignment='right')
         
-        plt.title(month+' '+str(A)+'-'+str(B))
-        plt.xlabel("Humidity (%) of Ant "+str(A),fontsize='x-small')
-        plt.ylabel("Humidity (%) of Ant "+str(B),fontsize='x-small')
+        #plt.title(month+' '+str(A)+'-'+str(B))
+        #plt.xlabel("Humidity (%) of Ant "+str(A),fontsize='x-small')
+        #plt.ylabel("Humidity (%) of Ant "+str(B),fontsize='x-small')
 
-        plt.show()
+        #plt.show()
+                
+        std_devs.loc[row] = [A,B,t_sigma,p_sigma,h_sigma]
+        row+=1
+print(std_devs)
+
+########################### getting the baselines
+
+enu = np.loadtxt('enu_dist/SUB_NovDec_2020.txt', delimiter=',')
+#baseline = np.loadtxt('baselines/SUB_NovDec_2020.txt', delimiter=',')
+#baseline = np.sort(baseline.view('f8,f8,f8,f8,f8'),order=['f0','f1'],axis=0).view(float)
+
+#plt.plot(baseline[:,4],std_devs['h'],'.r')
+#plt.title('Width vs. Baseline (Temp)')
+#plt.show()
+
+flagged = np.logical_or(enu[:,0]==6,enu[:,1]==6)
+enu = enu[~flagged]
+std_devs = std_devs[~flagged]
+
+### e = 2, n = 3, u = 4
+plt.subplot(2,3,1)
+plt.plot(np.sqrt(enu[:,2]**2+enu[:,3]**2+enu[:,4]**2),std_devs['t'],'.r')
+plt.title('Total',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,2)
+plt.plot(abs(enu[:,2]),std_devs['t'],'.r')
+plt.title('E-W',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,3)
+plt.plot(abs(enu[:,3]),std_devs['t'],'.r')
+plt.title('N-S',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,4)
+plt.plot(abs(enu[:,4]),std_devs['t'],'.r')
+plt.xlabel('U-D',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,5)
+plt.plot(abs(enu[:,3]+enu[:,2])/np.sqrt(2),std_devs['t'],'.r')
+plt.xlabel('NE-SW',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,6)
+plt.plot(abs(enu[:,3]-enu[:,2])/np.sqrt(2),std_devs['t'],'.r')
+plt.xlabel('NE-SW',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.suptitle(month+' Temperature')
+plt.show()
+
+### humidity
+plt.subplot(2,3,1)
+plt.plot(np.sqrt(enu[:,2]**2+enu[:,3]**2+enu[:,4]**2),std_devs['h'],'.b')
+plt.title('Total',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,2)
+plt.plot(abs(enu[:,2]),std_devs['h'],'.b')
+plt.title('E-W',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,3)
+plt.plot(abs(enu[:,3]),std_devs['h'],'.b')
+plt.title('N-S',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,4)
+plt.plot(abs(enu[:,4]),std_devs['h'],'.b')
+plt.xlabel('U-D',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,5)
+plt.plot(abs(enu[:,3]+enu[:,2])/np.sqrt(2),std_devs['h'],'.b')
+plt.xlabel('NE-SW',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,6)
+plt.plot(abs(enu[:,3]-enu[:,2])/np.sqrt(2),std_devs['h'],'.b')
+plt.xlabel('NE-SW',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.suptitle(month+' Humidity')
+plt.show()
+
+
+### pressure
+plt.subplot(2,3,1)
+plt.plot(np.sqrt(enu[:,2]**2+enu[:,3]**2+enu[:,4]**2),std_devs['p'],'.g')
+plt.title('Total',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,2)
+plt.plot(abs(enu[:,2]),std_devs['p'],'.g')
+plt.title('E-W',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,3)
+plt.plot(abs(enu[:,3]),std_devs['p'],'.g')
+plt.title('N-S',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,4)
+plt.plot(abs(enu[:,4]),std_devs['p'],'.g')
+plt.xlabel('U-D',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,5)
+plt.plot(abs(enu[:,3]+enu[:,2])/np.sqrt(2),std_devs['p'],'.g')
+plt.xlabel('NE-SW',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,6)
+plt.plot(abs(enu[:,3]-enu[:,2])/np.sqrt(2),std_devs['p'],'.g')
+plt.xlabel('NE-SW',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.suptitle(month+' Pressure')
+plt.show()
