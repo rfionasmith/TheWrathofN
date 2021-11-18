@@ -82,40 +82,40 @@ def get_median_offsets(f_name, ant_list, weather_type):
 
 ants = [1,2,3,4,5,7,8]
 
-#apr 1-30 2020
-#get_median_offsets("EX_Apr2020_h.txt",ants,"H")
+#apr 1-30 2020 X
+#get_median_offsets("EX_Apr2020_h.txt",ants,"H")  
 #get_median_offsets("EX_Apr2020_p.txt",ants,"P")
 #get_median_offsets("EX_Apr2020_t.txt",ants,"T")
 
-#may 1-31 2020
+#may 1-31 2020 X
 #get_median_offsets("EX_May2020_h.txt",ants,"H")
 #get_median_offsets("EX_May2020_p.txt",ants,"P")
 #get_median_offsets("EX_May2020_t.txt",ants,"T")
 
-ants = [1,2,3,4,5,6,7,8]       #6 in the hangar
+ants = [1,2,3,4,5,6,7,8]       #6 in the hangar X
 #get_median_offsets("VEX_Feb2015_h.txt",ants,"H")
 #get_median_offsets("VEX_Feb2015_p.txt",ants,"P")
 get_median_offsets("VEX_Feb2015_t.txt",ants,"T")
 
 ants = [1,2,3,4,5,7,8]      #6's humidity is always off
 
-#nov 1-30 2020
+#nov 1-30 2020 X
 #get_median_offsets("SC_Nov2020_h.txt",ants,"H")
 #get_median_offsets("SC_Nov2020_p.txt",ants,"P")
 #get_median_offsets("SC_Nov2020_t.txt",ants,"T")
 
-#dec 1-31 2020
+#dec 1-31 2020 X
 #get_median_offsets("SC_Dec2020_h.txt",ants,"H")
 #get_median_offsets("SC_Dec2020_p.txt",ants,"P")
 #get_median_offsets("SC_Dec2020_t.txt",ants,"T")
 
 ants = [1,2,4,5,7,8]
-#apr 1-30 2021,    3 in the hangar
+#apr 1-30 2021,    3 in the hangar X
 #get_median_offsets("CO_Apr2021_h.txt",ants,"H")
 #get_median_offsets("CO_Apr2021_p.txt",ants,"P")
 #get_median_offsets("CO_Apr2021_t.txt",ants,"T")
 
-#jul 1-31 2021,    7 in the hangar
+#jul 1-31 2021,    7 in the hangar X
 ants = [1,2,3,4,5,8]
 #get_median_offsets("CO_Jul2021_h.txt",ants,"H")
 #get_median_offsets("CO_Jul2021_p.txt",ants,"P")
@@ -123,7 +123,7 @@ ants = [1,2,3,4,5,8]
 
 ants = [1,2,5,7,8]      #ant 3 was put in the hangar mid september, 4 is crazy
 
-#sept 1-30 2021
+#sept 1-30 2021 X
 #get_median_offsets("SC_Sep2021_h.txt",ants,"H")
 #get_median_offsets("SC_Sep2021_p.txt",ants,"P")
 #get_median_offsets("SC_Sep2021_t.txt",ants,"T")

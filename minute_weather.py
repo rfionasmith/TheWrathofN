@@ -9,8 +9,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-month = 'SC_Dec2020'
-enu = np.loadtxt('enu_dist/SUB_NovDec_2020.txt', delimiter=',')
+month = 'VEX_Feb2015'
+enu = np.loadtxt('enu_dist/VEX_Jan_2015.txt', delimiter=',')
 bad_ants = [6]
 
 col_names = ['Unixtime','1','2','3','4','5','6','7','8']
@@ -155,45 +155,65 @@ print(std_devs)
 #plt.title('Width vs. Baseline (Temp)')
 #plt.show()
 #bad_ants = [5,6]
+total_dist = np.sqrt(enu[:,2]**2+enu[:,3]**2+enu[:,4]**2)
+ew = abs(enu[:,2])
+ns = abs(enu[:,3])
+ud = abs(enu[:,4])
+ne_sw = abs(enu[:,3]+enu[:,2])/np.sqrt(2)
+nw_se = abs(enu[:,3]-enu[:,2])/np.sqrt(2)
+dist = pd.DataFrame({'AntA':enu[:,0],'AntB':enu[:,1],'Total':total_dist,
+                     'EW':ew,'NS':ns,'UD':ud,'NE_SW':ne_sw,'NW_SE':nw_se})
+
+'''
+### Shenanigans for when ants are missing positions
+flag1 = np.logical_or(std_devs['AntA']==6,std_devs['AntB']==6)
+std_devs = std_devs[~flag1]
+std_devs = std_devs.reset_index(drop=True)
+dist = dist.reset_index(drop=True)
+flag2 = np.logical_or(std_devs['AntA']==6,std_devs['AntB']==6)
+std_devs = std_devs[~flag2]
+dist = dist[~flag2]    
+'''
 for ant in bad_ants:
-    flag = np.logical_or(enu[:,0]==ant,enu[:,1]==ant)
+    flag = np.logical_or(std_devs['AntA']==ant,std_devs['AntB']==ant)
     enu = enu[~flag]
+    dist = dist[~flag]
     std_devs = std_devs[~flag]
 
 ### e = 2, n = 3, u = 4
 plt.subplot(2,3,1)
-plt.plot(np.sqrt(enu[:,2]**2+enu[:,3]**2+enu[:,4]**2),std_devs['t'],'.r')
+plt.plot(dist['Total'],std_devs['t'],'.r')
 plt.title('Total',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,2)
-plt.plot(abs(enu[:,2]),std_devs['t'],'.r')
+plt.plot(dist['EW'],std_devs['t'],'.r')
 plt.title('E-W',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,3)
-plt.plot(abs(enu[:,3]),std_devs['t'],'.r')
+plt.plot(dist['NS'],std_devs['t'],'.r')
 plt.title('N-S',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,4)
-plt.plot(abs(enu[:,4]),std_devs['t'],'.r')
+plt.plot(dist['UD'],std_devs['t'],'.r')
 plt.xlabel('U-D',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,5)
-plt.plot(abs(enu[:,3]+enu[:,2])/np.sqrt(2),std_devs['t'],'.r')
+plt.plot(dist['NE_SW'],std_devs['t'],'.r')
 plt.xlabel('NE-SW',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,6)
-plt.plot(abs(enu[:,3]-enu[:,2])/np.sqrt(2),std_devs['t'],'.r')
-plt.xlabel('NE-SW',fontsize='small')
+plt.plot(dist['NW_SE'],std_devs['t'],'.r')
+plt.xlabel('NW-SE',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
@@ -202,38 +222,38 @@ plt.show()
 
 ### humidity
 plt.subplot(2,3,1)
-plt.plot(np.sqrt(enu[:,2]**2+enu[:,3]**2+enu[:,4]**2),std_devs['h'],'.b')
+plt.plot(dist['Total'],std_devs['h'],'.b')
 plt.title('Total',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,2)
-plt.plot(abs(enu[:,2]),std_devs['h'],'.b')
+plt.plot(dist['EW'],std_devs['h'],'.b')
 plt.title('E-W',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,3)
-plt.plot(abs(enu[:,3]),std_devs['h'],'.b')
+plt.plot(dist['NS'],std_devs['h'],'.b')
 plt.title('N-S',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,4)
-plt.plot(abs(enu[:,4]),std_devs['h'],'.b')
+plt.plot(dist['UD'],std_devs['h'],'.b')
 plt.xlabel('U-D',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,5)
-plt.plot(abs(enu[:,3]+enu[:,2])/np.sqrt(2),std_devs['h'],'.b')
+plt.plot(dist['NE_SW'],std_devs['h'],'.b')
 plt.xlabel('NE-SW',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,6)
-plt.plot(abs(enu[:,3]-enu[:,2])/np.sqrt(2),std_devs['h'],'.b')
-plt.xlabel('NE-SW',fontsize='small')
+plt.plot(dist['NW_SE'],std_devs['h'],'.b')
+plt.xlabel('NW-SE',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
@@ -243,40 +263,89 @@ plt.show()
 
 ### pressure
 plt.subplot(2,3,1)
-plt.plot(np.sqrt(enu[:,2]**2+enu[:,3]**2+enu[:,4]**2),std_devs['p'],'.g')
+plt.plot(dist['Total'],std_devs['p'],'.g')
 plt.title('Total',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,2)
-plt.plot(abs(enu[:,2]),std_devs['p'],'.g')
+plt.plot(dist['EW'],std_devs['p'],'.g')
 plt.title('E-W',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,3)
-plt.plot(abs(enu[:,3]),std_devs['p'],'.g')
+plt.plot(dist['NS'],std_devs['p'],'.g')
 plt.title('N-S',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,4)
-plt.plot(abs(enu[:,4]),std_devs['p'],'.g')
+plt.plot(dist['UD'],std_devs['p'],'.g')
 plt.xlabel('U-D',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,5)
-plt.plot(abs(enu[:,3]+enu[:,2])/np.sqrt(2),std_devs['p'],'.g')
+plt.plot(dist['NE_SW'],std_devs['p'],'.g')
 plt.xlabel('NE-SW',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.subplot(2,3,6)
-plt.plot(abs(enu[:,3]-enu[:,2])/np.sqrt(2),std_devs['p'],'.g')
-plt.xlabel('NE-SW',fontsize='small')
+plt.plot(dist['NW_SE'],std_devs['p'],'.g')
+plt.xlabel('NW-SE',fontsize='small')
 plt.xticks(fontsize='xx-small')
 plt.yticks(fontsize='xx-small')
 
 plt.suptitle(month+' Pressure')
 plt.show()
+'''
+### just to collect all the data in a file to see what's up, there is definitely a better way to do this
+### see result_plots.pdf for the actual plots/file
+old_record = pd.read_csv('results.txt')
+new_results = pd.merge(std_devs,dist, on=['AntA','AntB'])
+new_record = pd.concat([old_record,new_results])
+new_record.to_csv('results.txt', index=False)
+
+
+plt.subplot(2,3,1)
+plt.plot(new_record['Total'],new_record['h'],'.b')
+plt.title('Total',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,2)
+plt.plot(new_record['EW'],new_record['h'],'.b')
+plt.title('E-W',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,3)
+plt.plot(new_record['NS'],new_record['h'],'.b')
+plt.title('N-S',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,4)
+plt.plot(new_record['UD'],new_record['h'],'.b')
+plt.xlabel('U-D',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,5)
+plt.plot(new_record['NE_SW'],new_record['h'],'.b')
+plt.xlabel('NE-SW',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.subplot(2,3,6)
+plt.plot(new_record['NW_SE'],new_record['h'],'.b')
+plt.xlabel('NW-SE',fontsize='small')
+plt.xticks(fontsize='xx-small')
+plt.yticks(fontsize='xx-small')
+
+plt.suptitle('All Configs Humidity')
+plt.show()
+
+#'''
