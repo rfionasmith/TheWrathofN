@@ -9,8 +9,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-month = 'VEX_Feb2015'
-enu = np.loadtxt('enu_dist/VEX_Jan_2015.txt', delimiter=',')
+month = 'SC_Dec2020'
+enu = np.loadtxt('enu_dist/SUB_NovDec_2020.txt', delimiter=',')
+
+#month = 'EX_May2020'
+#enu = np.loadtxt('enu_dist/EXT_AprMay_2020.txt', delimiter=',')
+
 bad_ants = [6]
 
 col_names = ['Unixtime','1','2','3','4','5','6','7','8']
@@ -66,7 +70,7 @@ for idx in range(1,9):
         upper = np.percentile(t_off,84.134)
         t_sigma = (upper-lower)/2.
         
-        #plt.hist2d(tA,tB,bins=201,range=[[-10.05,10.05],[-10.05,10.05]],cmap=#plt.cm.plasma)
+        #plt.hist2d(tA,tB,bins=201,range=[[-10.05,10.05],[-10.05,10.05]],cmap=plt.cm.plasma)
         #plt.plot(x,P(x),'-y',lw=0.5)
         #plt.plot(x,P(x)+lower,'--y',lw=0.5)
         #plt.plot(x,P(x)+upper,'--y',lw=0.5)
@@ -75,7 +79,7 @@ for idx in range(1,9):
         #plt.text(9.5,-8.5,text,c='w',horizontalalignment='right')
         #plt.text(9.5,-9.5,P,c='w',horizontalalignment='right')
         
-        #plt.title(month+' '+str(A)+'-'+str(B))
+        plt.title("Subcompact December 2020 (66m)")
         #plt.xlabel("Temperature ($^\circ$C) of Ant "+str(A),fontsize='x-small')
         #plt.ylabel("Temperature ($^\circ$C) of Ant "+str(B),fontsize='x-small')
 
@@ -126,20 +130,20 @@ for idx in range(1,9):
         upper = np.percentile(h_off,84.134)
         h_sigma = (upper-lower)/2.
         
-        #plt.hist2d(hA,hB,bins=96,range=[[-0.5,95.5],[-0.5,95.5]],cmap=#plt.cm.plasma)
-        #plt.plot(x,P(x),'-y',lw=0.5)
-        #plt.plot(x,P(x)+lower,'--y',lw=0.5)
-        #plt.plot(x,P(x)+upper,'--y',lw=0.5)
+        plt.hist2d(hA,hB,bins=96,range=[[-0.5,95.5],[-0.5,95.5]],cmap=plt.cm.plasma)
+        plt.plot(x,P(x),'-y',lw=0.5)
+        plt.plot(x,P(x)+lower,'--y',lw=0.5)
+        plt.plot(x,P(x)+upper,'--y',lw=0.5)
         
         text = ('$\sigma = %.3f$' % h_sigma)+' %'
-        #plt.text(94.5,5.5,text,c='w',horizontalalignment='right')
-        #plt.text(94.5,1.5,P,c='w',horizontalalignment='right')
+        plt.text(94.5,5.5,text,c='w',horizontalalignment='right')
+        plt.text(94.5,1.5,P,c='w',horizontalalignment='right')
         
         #plt.title(month+' '+str(A)+'-'+str(B))
-        #plt.xlabel("Humidity (%) of Ant "+str(A),fontsize='x-small')
-        #plt.ylabel("Humidity (%) of Ant "+str(B),fontsize='x-small')
+        plt.xlabel("Humidity (%) of Ant "+str(A),fontsize='x-small')
+        plt.ylabel("Humidity (%) of Ant "+str(B),fontsize='x-small')
 
-        #plt.show()
+        plt.show()
                 
         std_devs.loc[row] = [A,B,t_sigma,p_sigma,h_sigma]
         row+=1
@@ -173,7 +177,7 @@ dist = dist.reset_index(drop=True)
 flag2 = np.logical_or(std_devs['AntA']==6,std_devs['AntB']==6)
 std_devs = std_devs[~flag2]
 dist = dist[~flag2]    
-'''
+
 for ant in bad_ants:
     flag = np.logical_or(std_devs['AntA']==ant,std_devs['AntB']==ant)
     enu = enu[~flag]
@@ -300,7 +304,7 @@ plt.yticks(fontsize='xx-small')
 
 plt.suptitle(month+' Pressure')
 plt.show()
-'''
+
 ### just to collect all the data in a file to see what's up, there is definitely a better way to do this
 ### see result_plots.pdf for the actual plots/file
 old_record = pd.read_csv('results.txt')

@@ -1,8 +1,12 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import cycler
 
-
+#n = 7
+#color = plt.cm.gnuplot(np.linspace(.1,.9,n))
+#plt.rcParams['axes.prop_cycle'] = cycler.cycler(color=color)
+plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.tab10.colors)
 def get_median_offsets(f_name, ant_list, weather_type):
     data = np.loadtxt(f_name,usecols=(3,4,5,6,7,8,9,10,11),skiprows=8)
     time = np.loadtxt(f_name,usecols=0,skiprows=8)
@@ -64,8 +68,11 @@ def get_median_offsets(f_name, ant_list, weather_type):
         
         #plt.plot(period,final_25[:,ant],lw=1,alpha=0.5)
         #plt.plot(period,final_75[:,ant],lw=1,alpha=0.5)
-    plt.title(f_name)
-    plt.xlabel("Days")
+    plt.title("Subcompact (December 2020)")
+    plt.xlabel("Day of the Month")
+    plt.ylim(-2.5,2.5)
+    plt.xlim(1,31)
+    plt.grid(True)
     
     #just to get y-axis labels
     if weather_type == "H":
@@ -73,7 +80,7 @@ def get_median_offsets(f_name, ant_list, weather_type):
     if weather_type == "P":
         plt.ylabel("millbars")
     if weather_type == "T":
-        plt.ylabel("Degrees Celsius")
+        plt.ylabel("Temperature Offset From Median ($^\circ$C)")
     plt.legend(fontsize='x-small')
     plt.show()
     #print(f_name)
@@ -92,10 +99,10 @@ ants = [1,2,3,4,5,7,8]
 #get_median_offsets("EX_May2020_p.txt",ants,"P")
 #get_median_offsets("EX_May2020_t.txt",ants,"T")
 
-ants = [1,2,3,4,5,6,7,8]       #6 in the hangar X
+ants = [1,2,3,4,5,7,8]       #6 in the hangar X
 #get_median_offsets("VEX_Feb2015_h.txt",ants,"H")
 #get_median_offsets("VEX_Feb2015_p.txt",ants,"P")
-get_median_offsets("VEX_Feb2015_t.txt",ants,"T")
+#get_median_offsets("VEX_Feb2015_t.txt",ants,"T")
 
 ants = [1,2,3,4,5,7,8]      #6's humidity is always off
 
@@ -107,7 +114,7 @@ ants = [1,2,3,4,5,7,8]      #6's humidity is always off
 #dec 1-31 2020 X
 #get_median_offsets("SC_Dec2020_h.txt",ants,"H")
 #get_median_offsets("SC_Dec2020_p.txt",ants,"P")
-#get_median_offsets("SC_Dec2020_t.txt",ants,"T")
+get_median_offsets("SC_Dec2020_t.txt",ants,"T")
 
 ants = [1,2,4,5,7,8]
 #apr 1-30 2021,    3 in the hangar X
