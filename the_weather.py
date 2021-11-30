@@ -70,7 +70,7 @@ def get_median_offsets(f_name, ant_list, weather_type):
         #plt.plot(period,final_75[:,ant],lw=1,alpha=0.5)
     plt.title("Subcompact (December 2020)")
     plt.xlabel("Day of the Month")
-    plt.ylim(-2.5,2.5)
+    #plt.ylim(-2.5,2.5)
     plt.xlim(1,31)
     plt.grid(True)
     
@@ -95,9 +95,9 @@ ants = [1,2,3,4,5,7,8]
 #get_median_offsets("EX_Apr2020_t.txt",ants,"T")
 
 #may 1-31 2020 X
-#get_median_offsets("EX_May2020_h.txt",ants,"H")
-#get_median_offsets("EX_May2020_p.txt",ants,"P")
-#get_median_offsets("EX_May2020_t.txt",ants,"T")
+get_median_offsets("EX_May2020_h.txt",ants,"H")
+get_median_offsets("EX_May2020_p.txt",ants,"P")
+get_median_offsets("EX_May2020_t.txt",ants,"T")
 
 ants = [1,2,3,4,5,7,8]       #6 in the hangar X
 #get_median_offsets("VEX_Feb2015_h.txt",ants,"H")
@@ -112,8 +112,8 @@ ants = [1,2,3,4,5,7,8]      #6's humidity is always off
 #get_median_offsets("SC_Nov2020_t.txt",ants,"T")
 
 #dec 1-31 2020 X
-#get_median_offsets("SC_Dec2020_h.txt",ants,"H")
-#get_median_offsets("SC_Dec2020_p.txt",ants,"P")
+get_median_offsets("SC_Dec2020_h.txt",ants,"H")
+get_median_offsets("SC_Dec2020_p.txt",ants,"P")
 get_median_offsets("SC_Dec2020_t.txt",ants,"T")
 
 ants = [1,2,4,5,7,8]
