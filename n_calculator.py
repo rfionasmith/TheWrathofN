@@ -34,8 +34,8 @@ def get_N(temp,rh):
 dry = get_N(0.0,15)
 wet = get_N(0.0,85)
 
-delta_RH = np.array([2.2,2.8,3.0,3.5,4.1])
-delta_T = np.array([0.6,0.7,0.8,0.9,1.1])
+delta_RH = np.array([2.2,2.8,3.0,3.5,4.0])
+delta_T = np.array([0.6,0.7,0.8,0.9,0.8])
 
 configs = ["SUB","COM","EX1","EX2","VEX"]
 configs = [30,50,100,200,500]

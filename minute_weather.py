@@ -9,8 +9,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-month = 'SC_Dec2020'
-enu = np.loadtxt('enu_dist/SUB_NovDec_2020.txt', delimiter=',')
+month = 'SC_Sep2021'
+enu = np.loadtxt('enu_dist/SUB_Sep_2021.txt', delimiter=',')
 
 #month = 'EX_May2020'
 #enu = np.loadtxt('enu_dist/EXT_AprMay_2020.txt', delimiter=',')
@@ -70,20 +70,20 @@ for idx in range(1,9):
         upper = np.percentile(t_off,84.134)
         t_sigma = (upper-lower)/2.
         
-        #plt.hist2d(tA,tB,bins=201,range=[[-10.05,10.05],[-10.05,10.05]],cmap=plt.cm.plasma)
-        #plt.plot(x,P(x),'-y',lw=0.5)
-        #plt.plot(x,P(x)+lower,'--y',lw=0.5)
-        #plt.plot(x,P(x)+upper,'--y',lw=0.5)
+        plt.hist2d(tA,tB,bins=201,range=[[-10.05,10.05],[-10.05,10.05]],cmap=plt.cm.plasma)
+        plt.plot(x,P(x),'-y',lw=0.5)
+        plt.plot(x,P(x)+lower,'--y',lw=0.5)
+        plt.plot(x,P(x)+upper,'--y',lw=0.5)
         
         text = '$\sigma = %.3f ^\circ$C' % t_sigma
-        #plt.text(9.5,-8.5,text,c='w',horizontalalignment='right')
-        #plt.text(9.5,-9.5,P,c='w',horizontalalignment='right')
+        plt.text(9.5,-8.5,text,c='w',horizontalalignment='right')
+        plt.text(9.5,-9.5,P,c='w',horizontalalignment='right')
         
-        plt.title("Subcompact December 2020 (66m)")
-        #plt.xlabel("Temperature ($^\circ$C) of Ant "+str(A),fontsize='x-small')
-        #plt.ylabel("Temperature ($^\circ$C) of Ant "+str(B),fontsize='x-small')
+        plt.title("Subcompact September 2021 (66m)")
+        plt.xlabel("Temperature ($^\circ$C) of Ant "+str(A),fontsize='x-small')
+        plt.ylabel("Temperature ($^\circ$C) of Ant "+str(B),fontsize='x-small')
 
-        #plt.show()
+        plt.show()
         
         ### pressure index 1
         pA = antA[:,1]
@@ -130,20 +130,20 @@ for idx in range(1,9):
         upper = np.percentile(h_off,84.134)
         h_sigma = (upper-lower)/2.
         
-        plt.hist2d(hA,hB,bins=96,range=[[-0.5,95.5],[-0.5,95.5]],cmap=plt.cm.plasma)
-        plt.plot(x,P(x),'-y',lw=0.5)
-        plt.plot(x,P(x)+lower,'--y',lw=0.5)
-        plt.plot(x,P(x)+upper,'--y',lw=0.5)
+        #plt.hist2d(hA,hB,bins=96,range=[[-0.5,95.5],[-0.5,95.5]],cmap=plt.cm.plasma)
+        #plt.plot(x,P(x),'-y',lw=0.5)
+        #plt.plot(x,P(x)+lower,'--y',lw=0.5)
+        #plt.plot(x,P(x)+upper,'--y',lw=0.5)
         
         text = ('$\sigma = %.3f$' % h_sigma)+' %'
-        plt.text(94.5,5.5,text,c='w',horizontalalignment='right')
-        plt.text(94.5,1.5,P,c='w',horizontalalignment='right')
+        #plt.text(94.5,5.5,text,c='w',horizontalalignment='right')
+        #plt.text(94.5,1.5,P,c='w',horizontalalignment='right')
         
         #plt.title(month+' '+str(A)+'-'+str(B))
-        plt.xlabel("Humidity (%) of Ant "+str(A),fontsize='x-small')
-        plt.ylabel("Humidity (%) of Ant "+str(B),fontsize='x-small')
+        #plt.xlabel("Humidity (%) of Ant "+str(A),fontsize='x-small')
+        #plt.ylabel("Humidity (%) of Ant "+str(B),fontsize='x-small')
 
-        plt.show()
+        #plt.show()
                 
         std_devs.loc[row] = [A,B,t_sigma,p_sigma,h_sigma]
         row+=1
