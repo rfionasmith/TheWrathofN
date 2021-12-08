@@ -9,8 +9,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-month = 'SC_Sep2021'
-enu = np.loadtxt('enu_dist/SUB_Sep_2021.txt', delimiter=',')
+month = 'EX_Apr2020'
+enu = np.loadtxt('enu_dist/EXT_AprMay_2020.txt', delimiter=',')
 
 #month = 'EX_May2020'
 #enu = np.loadtxt('enu_dist/EXT_AprMay_2020.txt', delimiter=',')
@@ -79,7 +79,7 @@ for idx in range(1,9):
         plt.text(9.5,-8.5,text,c='w',horizontalalignment='right')
         plt.text(9.5,-9.5,P,c='w',horizontalalignment='right')
         
-        plt.title("Subcompact September 2021 (66m)")
+        plt.title("EX April 2020 (25m)")
         plt.xlabel("Temperature ($^\circ$C) of Ant "+str(A),fontsize='x-small')
         plt.ylabel("Temperature ($^\circ$C) of Ant "+str(B),fontsize='x-small')
 
