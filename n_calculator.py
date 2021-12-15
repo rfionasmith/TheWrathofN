@@ -83,6 +83,7 @@ plt.plot(configs,path_temp_wet,'.-',label = 'Temperature (wet)')
 plt.legend(fontsize = 'xx-small')
 plt.ylabel('Path Length Difference (mm)')
 plt.xlabel('Max Baseline (m)')
+plt.title("Median Scatter for each Configuration Range")
 plt.show()    
 
 
