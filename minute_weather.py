@@ -9,11 +9,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+#month = 'SC_Dec2020'
+#enu = np.loadtxt('enu_dist/SUB_NovDec_2020.txt', delimiter=',')
+
 month = 'EX_Apr2020'
 enu = np.loadtxt('enu_dist/EXT_AprMay_2020.txt', delimiter=',')
-
-#month = 'EX_May2020'
-#enu = np.loadtxt('enu_dist/EXT_AprMay_2020.txt', delimiter=',')
 
 bad_ants = [6]
 
@@ -36,6 +36,9 @@ time = all_data['Unixtime'].values
 time = np.mod(time,86400)/3600
 
 night_mask = np.logical_and(time>4,time<16)
+
+#file = open("Sub_Dec20_solutions.txt",'w')
+fits = pd.read_csv("Sub_Dec20_solutions.txt",header=None)
 
 std_devs = pd.DataFrame(columns = ['AntA','AntB','t','p','h'])
 row = 0
@@ -63,7 +66,14 @@ for idx in range(1,9):
         tB = tB[ok]
         
         x = np.linspace(-10,10,201)
-        P = np.poly1d(np.polyfit(tA,tB,1))
+        z = np.polyfit(tA,tB,1)
+        P = np.poly1d(z)
+        #line = str(z[0])+','+str(z[1])+'\n'
+        #file.writelines(line)
+        
+        #P = np.poly1d([fits[0][row],fits[1][row]])
+        #print(P)
+        
         
         t_off = tB - P(tA)
         lower = np.percentile(t_off,15.866)
@@ -79,7 +89,7 @@ for idx in range(1,9):
         plt.text(9.5,-8.5,text,c='w',horizontalalignment='right')
         plt.text(9.5,-9.5,P,c='w',horizontalalignment='right')
         
-        plt.title("EX April 2020 (25m)")
+        plt.title("EXT Apr 2020 (original fit)")
         plt.xlabel("Temperature ($^\circ$C) of Ant "+str(A),fontsize='x-small')
         plt.ylabel("Temperature ($^\circ$C) of Ant "+str(B),fontsize='x-small')
 
@@ -147,6 +157,8 @@ for idx in range(1,9):
                 
         std_devs.loc[row] = [A,B,t_sigma,p_sigma,h_sigma]
         row+=1
+#file.close()
+print("APR ORIGINAL FIT")
 print(std_devs)
 
 ########################### getting the baselines
