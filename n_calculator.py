@@ -36,15 +36,28 @@ temp_offsets = np.array([[0.25273164, 0.29846392, 0.52767189, 0.45965437],
                         [0.29204384, 0.46563439, 0.61434332, 0.47715959],
                         [0.29616528, 0.39820763, 0.53922996, 0.4831396]])
 
+temp_mids = np.array([[0.,  0.1, 0.1, 0.2],
+                      [0.1, 0.1, 0.1, 0.2],
+                      [0.1, 0.1, 0.1, 0.2],
+                      [0.1, 0.1, 0.1, 0.2],
+                      [0.1, 0.,  0.1, 0.2]])
+
 rh_offsets = np.array([[1.17063942, 1.29853967, 1.69918469, 2.58830068],
                       [1.2630582,  1.40159554, 2.18928169, 2.73907189],
                       [1.27001066, 1.44896458, 2.3513875,  2.58830068],
                       [1.26937382, 1.39496434, 2.03976827, 2.64276132],
                       [1.32995991, 1.37060061, 1.87243808, 2.64276132]])
 
+rh_mids = np.array([[0.7, 0.8, 0.9, 1.2],
+                    [0.9, 0.8, 0.7, 1.4],
+                    [0.7, 0.8, 0.85, 1.4],
+                    [0.75, 1., 0.7, 1.4],
+                    [0.8, 0.8, 0.8, 1.15]])
+
 delta_T = np.array([np.median(temp_offsets[:,0]),np.median(temp_offsets[:,1]),np.median(temp_offsets[:,2]),np.median(temp_offsets[:,3])])
 delta_RH = np.array([np.median(rh_offsets[:,0]),np.median(rh_offsets[:,1]),np.median(rh_offsets[:,2]),np.median(rh_offsets[:,3])])
-
+T_mid = np.array([np.median(temp_mids[:,0]),np.median(temp_mids[:,1]),np.median(temp_mids[:,2]),np.median(temp_mids[:,3])])
+RH_mid = np.array([np.median(rh_mids[:,0]),np.median(rh_mids[:,1]),np.median(rh_mids[:,2]),np.median(rh_mids[:,3])])
 dry = get_N(0.0,15)
 wet = get_N(0.0,85)
 
@@ -58,11 +71,6 @@ path_humidity = []
 for idx in range(0,4):
     path = (get_N(0.0,15.0+delta_RH[idx])-dry)/10.
     path_humidity.append(path)
-    
-path_humidity_wet = []
-for idx in range(0,4):
-    path = (get_N(0.0,85.0+delta_RH[idx])-wet)/10.
-    path_humidity_wet.append(path)
 
 path_temp_dry = []
 for idx in range(0,4):
@@ -75,11 +83,31 @@ for idx in range(0,4):
     path = (get_N(delta_T[idx],85.0)-wet)/10.
     path_temp_wet.append(path)
 print(path_temp_wet)
+
+mid_humidity = []
+for idx in range(0,4):
+    path = (get_N(0.0,15.0+RH_mid[idx])-dry)/10.
+    mid_humidity.append(path)
+
+mid_temp_dry = []
+for idx in range(0,4):
+    path = abs(get_N(T_mid[idx],15.0)-dry)/10.
+    mid_temp_dry.append(path)    
+
+mid_temp_wet = []
+for idx in range(0,4):
+    path = (get_N(T_mid[idx],85.0)-wet)/10.
+    mid_temp_wet.append(path)
+
+
     
 plt.plot(configs,path_humidity,'.-',label = 'Humidity')
 #plt.semilogx(configs,path_humidity_wet,'.-')
 plt.plot(configs,path_temp_dry,'.-',label = 'Temperature (dry)')
 plt.plot(configs,path_temp_wet,'.-',label = 'Temperature (wet)')
+plt.plot(configs,mid_humidity,'.--',label='Mid Humidity')
+plt.plot(configs,mid_temp_dry,'.--',label='Mid Temp(dry)')
+plt.plot(configs,mid_temp_wet,'.--',label='Mid Temp(wet)')
 plt.legend(fontsize = 'xx-small')
 plt.ylabel('Path Length Difference (mm)')
 plt.xlabel('Max Baseline (m)')

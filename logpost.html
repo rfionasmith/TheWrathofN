@@ -29,6 +29,9 @@ How different is the weather across the array?
 
 <img src="plots/t_SUB_2dhist.png" width="450">
 <img src="plots/t_EXT_2dhist.png" width="450">
+<br>
+<img src="plots/baseline_difference_SCDec20.png" width="450">
+<img src="plots/baseline_difference_EXMay20.png" width="450">
 
 <p>
 	I calculated a line of best fit (solid yellow) and &plusmn;1&sigma; for the distribution (dotted yellow). With this I got the width of the distribution to use as a measure of how different the weather values are across each baseline. I compiled these results for all the baselines in the configurations I had looked at (8 months total) and then compared them to baseline length to see if there was any correlation. I compared the rms scatter to total baseline length, as well as the distance projected on different cardinal directions.
@@ -38,9 +41,13 @@ How different is the weather across the array?
 	A side note about the differing slopes in the lines of best fit. The slope for the 1-7 baseline in extended is noticably less than expected at .90 instead of closer to 1.0. It seemed that this could be an artifact of the fitting process so as a sanity check I went back and used the best fit solutions for the December subcompact configuration instead. In subcompact the antennas in the inner ring are so close together that they should be measuring essentially the same weather and any discrepancies should be due to individual differences between the antennas and measurement error. When I applied these solutions to the other configurations it corrects this problem, but the results and scatter measurements are almost unchanged.
 </p>
 
-<img src="plots/All_Temperature2.png" width="600">
+<img src="plots/t_offset_from_fit.png" width="600">
 <br>
-<img src="plots/All_Humidity2.png" width="600">
+<img src="plots/h_offset_from_fit.png" width="600">
+<br>
+<img src="plots/t_median_difference.png" width="600">
+<br>
+<img src="plots/h_median_difference.png" width="600">
 
 <p>
 	These plots above show the rms scatter in humidity and temperature compared to the baseline length along various axes (in meters). I also binned the data according to approximate baseline ranges for each configuration (~30m, ~50m, ~150m,~500m) and found the median of the scatter measurements within each of those ranges, the error bars are &plusmn;1&sigma;. From these plots it is pretty clear to see that there is a general positive correlation between weather difference and distance between antennas. The humidity offsets have a stronger correlation than temperature, and a consistently upward trend. Interestingly for both, the clearest relationship is with distance in the North-South direciton. The temperature data is generally noisier, but it definitely seems to decrease at the longest baselines. This is unexpected, but also may be due to the fact that there is much less VEX range data than the other configurations. Another possibility is that there is a limit to how different the temperature can be across the array, so after a certain point the distance isn't a major factor - more data is definitely needed to see if either of these is the case.

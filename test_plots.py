@@ -17,7 +17,7 @@ configs = [0,30,50,100,200,500,1000]
 
 
 distance = data['N-S']
-values = data['t_sigma']
+values = data['h_mid']
 '''
 sc = np.logical_and(distance>0,distance<=30)
 co = np.logical_and(distance>30,distance<=50)
@@ -111,7 +111,7 @@ for i in range(1,6):
     plt.grid(True,which='both')
     plt.xlim([1,600])
    # ax.tick_params(axis='both',labelsize=6)
-
+    print(bins)
 #plt.suptitle("Test Axes")
 plt.show()
     
