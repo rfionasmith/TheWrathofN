@@ -17,8 +17,8 @@ configs = [0,30,50,100,200,500,1000]
 
 
 distance = data['N-S']
-values = data['h']
-
+values = data['t_sigma']
+'''
 sc = np.logical_and(distance>0,distance<=30)
 co = np.logical_and(distance>30,distance<=50)
 ex1 = np.logical_and(distance>50,distance<=150)
@@ -77,22 +77,24 @@ plt.axis('off')
 plt.xlim([0,10])
 plt.suptitle('Humidity Offsets')
 plt.show()
-
+'''
 #pp.close()
 plt.figure(figsize=(11,2.1))
-plt.suptitle("Humidity Offsets")
+plt.suptitle("Temperature Offsets")
 for i in range(1,6):
     plt.subplot(1,5,i)
-    plt.yticks(np.arange(0,7,step=1))
+    #plt.yticks(np.arange(0,5,step=1))
+    if i ==5:
+        i+=1
     if i == 4:
         i+=1
     if i == 1:
-        plt.ylabel("% Humidity")
+        plt.ylabel("Temperature ($^\circ$C)")
     else:
         plt.tick_params('y',labelleft=False)
-    distance = data.iloc[:,i+4]
-    plt.xlabel(data.columns.values[i+4]+' Distance')
-    plt.semilogx(distance,values,'.b',markersize=1.5,alpha=0.9)
+    distance = data.iloc[:,i+8]
+    plt.xlabel(data.columns.values[i+8]+' Distance')
+    plt.semilogx(distance,values,'.r',markersize=1.5,alpha=0.9)
     
     sc = np.logical_and(distance>0,distance<=30)
     co = np.logical_and(distance>30,distance<=50)

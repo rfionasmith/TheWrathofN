@@ -9,13 +9,13 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-#month = 'SC_Dec2020'
-#enu = np.loadtxt('enu_dist/SUB_NovDec_2020.txt', delimiter=',')
+month = 'CO_Apr2021'
+enu = np.loadtxt('enu_dist/COM_Apr_2021.txt', delimiter=',')
 
-month = 'EX_Apr2020'
-enu = np.loadtxt('enu_dist/EXT_AprMay_2020.txt', delimiter=',')
+#month = 'EX_May2020'
+#enu = np.loadtxt('enu_dist/EXT_AprMay_2020.txt', delimiter=',')
 
-bad_ants = [6]
+bad_ants = [3,6]
 
 col_names = ['Unixtime','1','2','3','4','5','6','7','8']
 t_df = pd.read_csv(month+'_t.txt',names=col_names,usecols=[0,4,5,6,7,8,9,10,11],skiprows=10,delim_whitespace=True)
@@ -27,7 +27,23 @@ p_df = p_df.drop_duplicates(subset=['Unixtime'])
 col_names = ['Unixtime','1_h','2_h','3_h','4_h','5_h','6_h','7_h','8_h']  #for consistency, marge doesn't add the suffixes the second time
 h_df = pd.read_csv(month+'_h.txt',names=col_names,usecols=[0,4,5,6,7,8,9,10,11],skiprows=10,delim_whitespace=True)
 h_df = h_df.drop_duplicates(subset=['Unixtime'])
+'''
+month = 'SC_Nov2020'
+col_names = ['Unixtime','1','2','3','4','5','6','7','8']
+t_df1 = pd.read_csv(month+'_t.txt',names=col_names,usecols=[0,4,5,6,7,8,9,10,11],skiprows=10,delim_whitespace=True)
+t_df1 = t_df1.drop_duplicates(subset=['Unixtime'])
 
+p_df1 = pd.read_csv(month+'_p.txt',names=col_names,usecols=[0,4,5,6,7,8,9,10,11],skiprows=10,delim_whitespace=True)
+p_df1 = p_df1.drop_duplicates(subset=['Unixtime'])
+
+col_names = ['Unixtime','1_h','2_h','3_h','4_h','5_h','6_h','7_h','8_h']  #for consistency, marge doesn't add the suffixes the second time
+h_df1 = pd.read_csv(month+'_h.txt',names=col_names,usecols=[0,4,5,6,7,8,9,10,11],skiprows=10,delim_whitespace=True)
+h_df1 = h_df1.drop_duplicates(subset=['Unixtime'])
+
+t_df+= t_df1
+p_df+= p_df1
+h_df+= h_df1
+'''
 merge1 = pd.merge(t_df, p_df, how='outer', on='Unixtime', suffixes=('_t','_p'))
 all_data = pd.merge(merge1, h_df, how='outer',on='Unixtime')
 all_data = all_data.sort_values(by=['Unixtime'])    #merge tacks the extras on the end, this puts them back in time order
@@ -40,7 +56,7 @@ night_mask = np.logical_and(time>4,time<16)
 #file = open("Sub_Dec20_solutions.txt",'w')
 fits = pd.read_csv("Sub_Dec20_solutions.txt",header=None)
 
-std_devs = pd.DataFrame(columns = ['AntA','AntB','t','p','h'])
+std_devs = pd.DataFrame(columns = ['Month','AntA','AntB','t_sigma','t_mid','p_sigma','p_mid','h_sigma','h_mid'])
 row = 0
 for idx in range(1,9):
     for jdx in range (idx+1,9):
@@ -76,6 +92,8 @@ for idx in range(1,9):
         
         
         t_off = tB - P(tA)
+        t_diff = tA - tB
+        t_mid = abs(np.median(t_diff))
         lower = np.percentile(t_off,15.866)
         upper = np.percentile(t_off,84.134)
         t_sigma = (upper-lower)/2.
@@ -88,8 +106,9 @@ for idx in range(1,9):
         text = '$\sigma = %.3f ^\circ$C' % t_sigma
         plt.text(9.5,-8.5,text,c='w',horizontalalignment='right')
         plt.text(9.5,-9.5,P,c='w',horizontalalignment='right')
+        plt.plot(x,x,'-r',lw=2)
         
-        plt.title("EXT Apr 2020 (original fit)")
+        plt.title("EX May")
         plt.xlabel("Temperature ($^\circ$C) of Ant "+str(A),fontsize='x-small')
         plt.ylabel("Temperature ($^\circ$C) of Ant "+str(B),fontsize='x-small')
 
@@ -106,6 +125,8 @@ for idx in range(1,9):
         P = np.poly1d(np.polyfit(pA,pB,1))
         
         p_off = pB - P(pA)
+        p_diff = pA - pB
+        p_mid = abs(np.median(p_diff))
         lower = np.percentile(p_off,15.866)
         upper = np.percentile(p_off,84.134)
         p_sigma = (upper-lower)/2.
@@ -136,6 +157,8 @@ for idx in range(1,9):
         P = np.poly1d(np.polyfit(hA,hB,1))
         
         h_off = hB - P(hA)
+        h_diff = hA - hB
+        h_mid = abs(np.median(h_diff))
         lower = np.percentile(h_off,15.866)
         upper = np.percentile(h_off,84.134)
         h_sigma = (upper-lower)/2.
@@ -155,10 +178,10 @@ for idx in range(1,9):
 
         #plt.show()
                 
-        std_devs.loc[row] = [A,B,t_sigma,p_sigma,h_sigma]
+        std_devs.loc[row] = [month,A,B,t_sigma,t_mid,p_sigma,p_mid,h_sigma,h_mid]
         row+=1
 #file.close()
-print("APR ORIGINAL FIT")
+#print("APR ORIGINAL FIT")
 print(std_devs)
 
 ########################### getting the baselines
@@ -182,140 +205,19 @@ dist = pd.DataFrame({'AntA':enu[:,0],'AntB':enu[:,1],'Total':total_dist,
 
 '''
 ### Shenanigans for when ants are missing positions
-flag1 = np.logical_or(std_devs['AntA']==6,std_devs['AntB']==6)
+flag1 = np.logical_or(std_devs['AntA']==2,std_devs['AntB']==2)
 std_devs = std_devs[~flag1]
 std_devs = std_devs.reset_index(drop=True)
 dist = dist.reset_index(drop=True)
-flag2 = np.logical_or(std_devs['AntA']==6,std_devs['AntB']==6)
-std_devs = std_devs[~flag2]
-dist = dist[~flag2]    
-
+#flag2 = np.logical_or(std_devs['AntA']==6,std_devs['AntB']==6)
+#std_devs = std_devs[~flag2]
+#dist = dist[~flag2]    
+'''
 for ant in bad_ants:
     flag = np.logical_or(std_devs['AntA']==ant,std_devs['AntB']==ant)
-    enu = enu[~flag]
+    #enu = enu[~flag]
     dist = dist[~flag]
     std_devs = std_devs[~flag]
-
-### e = 2, n = 3, u = 4
-plt.subplot(2,3,1)
-plt.plot(dist['Total'],std_devs['t'],'.r')
-plt.title('Total',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,2)
-plt.plot(dist['EW'],std_devs['t'],'.r')
-plt.title('E-W',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,3)
-plt.plot(dist['NS'],std_devs['t'],'.r')
-plt.title('N-S',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,4)
-plt.plot(dist['UD'],std_devs['t'],'.r')
-plt.xlabel('U-D',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,5)
-plt.plot(dist['NE_SW'],std_devs['t'],'.r')
-plt.xlabel('NE-SW',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,6)
-plt.plot(dist['NW_SE'],std_devs['t'],'.r')
-plt.xlabel('NW-SE',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.suptitle(month+' Temperature')
-plt.show()
-
-### humidity
-plt.subplot(2,3,1)
-plt.plot(dist['Total'],std_devs['h'],'.b')
-plt.title('Total',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,2)
-plt.plot(dist['EW'],std_devs['h'],'.b')
-plt.title('E-W',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,3)
-plt.plot(dist['NS'],std_devs['h'],'.b')
-plt.title('N-S',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,4)
-plt.plot(dist['UD'],std_devs['h'],'.b')
-plt.xlabel('U-D',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,5)
-plt.plot(dist['NE_SW'],std_devs['h'],'.b')
-plt.xlabel('NE-SW',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,6)
-plt.plot(dist['NW_SE'],std_devs['h'],'.b')
-plt.xlabel('NW-SE',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.suptitle(month+' Humidity')
-plt.show()
-
-
-### pressure
-plt.subplot(2,3,1)
-plt.plot(dist['Total'],std_devs['p'],'.g')
-plt.title('Total',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,2)
-plt.plot(dist['EW'],std_devs['p'],'.g')
-plt.title('E-W',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,3)
-plt.plot(dist['NS'],std_devs['p'],'.g')
-plt.title('N-S',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,4)
-plt.plot(dist['UD'],std_devs['p'],'.g')
-plt.xlabel('U-D',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,5)
-plt.plot(dist['NE_SW'],std_devs['p'],'.g')
-plt.xlabel('NE-SW',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,6)
-plt.plot(dist['NW_SE'],std_devs['p'],'.g')
-plt.xlabel('NW-SE',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.suptitle(month+' Pressure')
-plt.show()
 
 ### just to collect all the data in a file to see what's up, there is definitely a better way to do this
 ### see result_plots.pdf for the actual plots/file
@@ -324,44 +226,3 @@ new_results = pd.merge(std_devs,dist, on=['AntA','AntB'])
 new_record = pd.concat([old_record,new_results])
 new_record.to_csv('results.txt', index=False)
 
-
-plt.subplot(2,3,1)
-plt.plot(new_record['Total'],new_record['h'],'.b')
-plt.title('Total',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,2)
-plt.plot(new_record['EW'],new_record['h'],'.b')
-plt.title('E-W',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,3)
-plt.plot(new_record['NS'],new_record['h'],'.b')
-plt.title('N-S',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,4)
-plt.plot(new_record['UD'],new_record['h'],'.b')
-plt.xlabel('U-D',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,5)
-plt.plot(new_record['NE_SW'],new_record['h'],'.b')
-plt.xlabel('NE-SW',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.subplot(2,3,6)
-plt.plot(new_record['NW_SE'],new_record['h'],'.b')
-plt.xlabel('NW-SE',fontsize='small')
-plt.xticks(fontsize='xx-small')
-plt.yticks(fontsize='xx-small')
-
-plt.suptitle('All Configs Humidity')
-plt.show()
-
-#'''
