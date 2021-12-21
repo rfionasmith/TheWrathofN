@@ -1,5 +1,3 @@
-LOG DRAFT
-
 <p>
 	A while ago, in <a href="http://sma1.sma.hawaii.edu/internal/log/view.html?entrynumber=39230">Log #39230</a>, Karto started looking into the possibility of changing the refractivity value (N) we use when correcting for atmospheric path lengths. In that post he focused on the affects of weather changes and pad altitude. As a next step in the investiogation I dug into a bunch of the weather data from the various antenna stations. The goal was to answer questions from that last post about how reliable and consistent are the weather station measurements across the array and how much does the difference in weather across the array actually matter when it comes to refractivity and phase correction.
 </p>
@@ -12,8 +10,8 @@ How stable are the weather stations?
 	To start I pulled the temperature, pressure, and relative humidity data for various months in different configurations - starting with subcompact and eventually getting up to VEX. Using only the night time data (04-16 UT) I determined an array median for each parameter and then used that to calculate the offset of each of the antennas' values. I also flagged out antennas that were in the hangar or whose weather stations were not working right. Once I had the offsets for each antenna, I took the median value for each antenna on each day, shown in the plots below. I repeated this with several months in all 4 configurations and for each of the weather parameters.
 </p>
 
-<img src="plots/SUB_stability.png" width="450">
-<img src="plots/EXT_stability.png" width="450">
+<img src="/internal/webfiles/dec2021/SUB_stability.png">
+<img src="/internal/webfiles/dec2021/EXT_stability.png">
 
 <p>
 These plots show the temperature offsets and as expected there is almost no difference between antennas when in subcompact, but much more variation in extended when the baselines are longer. This trend held true for temperature and humidity across the various configurations - with humidity tending to be more noisy and also affected by the 100% saturation point with bad weather. The offsets in subcompact are pretty small, about a tenth of a degree, and fairly consistent. Even in extended the offsets don't get to be morethat 1.5-2&degC. Humidity is noisier but the offsets are still about a 3-5% difference in extended. The pressure offsets are essentially constant, varying only by .1 millibars over a month, maybe. The difference between the antennas is also pretty small, about .1-.2 mbar across antennas at the same altitude and 1-3 mbars for antennas on pads further out. In general it looks like the weather measurements are fairly stable and consistent with each other in the long term, even with some variation at longer baselines.
@@ -27,11 +25,11 @@ How different is the weather across the array?
 	Once I could determine that the weather measurements were pretty stable over time, I could look at how different the actual weather was across the array. I directly compared the minute-to-minute measurements for different baselines in each configuraton for pressure, temperature, and relative humidity. Shown below are the comparisons of temperature for the longest baselines in the extended configuration, and the same antenna pair in subcompact for the months above.
 </p>
 
-<img src="plots/t_SUB_2dhist.png" width="450">
-<img src="plots/t_EXT_2dhist.png" width="450">
+<img src="/internal/webfiles/dec2021/t_SUB_2dhist.png">
+<img src="/internal/webfiles/dec2021/t_EXT_2dhist.png">
 <br>
-<img src="plots/baseline_difference_SCDec20.png" width="450">
-<img src="plots/baseline_difference_EXMay20.png" width="450">
+<img src="/internal/webfiles/dec2021/baseline_difference_SCDec20.png">
+<img src="/internal/webfiles/dec2021/baseline_difference_EXMay20.png">
 
 <p>
 	I calculated a line of best fit (solid yellow) and &plusmn;1&sigma; for the distribution (dotted yellow). With this I got the width of the distribution to use as a measure of how different the weather values are across each baseline. I compiled these results for all the baselines in the configurations I had looked at (8 months total) and then compared them to baseline length to see if there was any correlation. I compared the rms scatter to total baseline length, as well as the distance projected on different cardinal directions.
@@ -41,13 +39,13 @@ How different is the weather across the array?
 	A side note about the differing slopes in the lines of best fit. The slope for the 1-7 baseline in extended is noticably less than expected at .90 instead of closer to 1.0. It seemed that this could be an artifact of the fitting process so as a sanity check I went back and used the best fit solutions for the December subcompact configuration instead. In subcompact the antennas in the inner ring are so close together that they should be measuring essentially the same weather and any discrepancies should be due to individual differences between the antennas and measurement error. When I applied these solutions to the other configurations it corrects this problem, but the results and scatter measurements are almost unchanged.
 </p>
 
-<img src="plots/t_offset_from_fit.png" width="600">
+<img src="/internal/webfiles/dec2021/t_offset_from_fit.png">
 <br>
-<img src="plots/h_offset_from_fit.png" width="600">
+<img src="/internal/webfiles/dec2021/h_offset_from_fit.png">
 <br>
-<img src="plots/t_median_difference.png" width="600">
+<img src="/internal/webfiles/dec2021/t_median_difference.png">
 <br>
-<img src="plots/h_median_difference.png" width="600">
+<img src="/internal/webfiles/dec2021/h_median_difference.png">
 
 <p>
 	These plots above show the rms scatter in humidity and temperature compared to the baseline length along various axes (in meters). I also binned the data according to approximate baseline ranges for each configuration (~30m, ~50m, ~150m,~500m) and found the median of the scatter measurements within each of those ranges, the error bars are &plusmn;1&sigma;. From these plots it is pretty clear to see that there is a general positive correlation between weather difference and distance between antennas. The humidity offsets have a stronger correlation than temperature, and a consistently upward trend. Interestingly for both, the clearest relationship is with distance in the North-South direciton. The temperature data is generally noisier, but it definitely seems to decrease at the longest baselines. This is unexpected, but also may be due to the fact that there is much less VEX range data than the other configurations. Another possibility is that there is a limit to how different the temperature can be across the array, so after a certain point the distance isn't a major factor - more data is definitely needed to see if either of these is the case.
@@ -61,7 +59,7 @@ Bringing it back to N, is the difference big enough to  matter?
 	So looking at those above plots, I took the median estimates and the upper error/worst-case scenario estimates and plugged them into the handy Section 1 equations from  <a href="https://www.itu.int/dms_pubrec/itu-r/rec/p/R-REC-P.453-11-201507-S!!PDF-E.pdf">this memo</a> to calculate the difference in refractivity, &Delta;N, along a baseline. I did this for both 'Dry' (RH 15%) and 'Wet' (RH 85%) nights for temperature using the same criteria from Karto's last log. I then used that to estimate the path length difference between the two antennas, assuming that the 'ground' atmosphere went up ~100m (nice round numbers).
 </p>
 
-<img src="plots/path_length.png" width="450">
+<img src="/internal/webfiles/dec2021/path_length.png">
 
 <p>
 	This shows the calculated path length differences from the median scatter for each configuration. The 'max baseline' values are the cutoffs I used to characterize the configuration ranges earlier (30m, 50m, 150m, 500m). The positive trend is clear, as well as the odd decrease in temperature at the higher baselines.
