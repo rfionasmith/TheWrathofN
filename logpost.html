@@ -70,7 +70,7 @@ Bringing it back to N, is the difference big enough to  matter?
 </p>
 
 <p>
-	For this analysis I'm operating under the assumption that changes smaller than a tenth of a wavelength aren't significant - which for the SMA would be around .1mm. From the data analysis I've done so far, the weather differences between antennas is generally well below that threshold. The differences in refractivity and path length between antennas don't really come close to it until we look at the longest baselines and the worst weather. From that I think it is safe to assume that, with a few exceptions, the antenna-to-antenna difference in weather isn't enough to significantly affect the phase stability. 
+	For this analysis I'm operating under the assumption that changes smaller than a tenth of a wavelength aren't significant - which for the SMA would be around .1mm. From the data analysis I've done so far, the weather differences between antennas is generally well below that threshold. The differences in refractivity and path length between antennas don't really come close to it until we look at the longest baselines and the worst weather. From that I think it is safe to assume that, with a few exceptions, the antenna-to-antenna difference in weather isn't enough to significantly affect the phase stability. If in the future we want to implement phase correction between antennas we would also likely need to have weather stations that can reliably measure the differences between antennas in the compact configuration and larger. Based on these results the measurement errors for the weather stations would have to be around 1% for relative humidity and &lt;.1&degC in temperature.
 </p>
 
 <p>
@@ -78,5 +78,5 @@ Bringing it back to N, is the difference big enough to  matter?
 </p>
 
 <p>
-	Ultimately, we don't need to worry about adjusting the refractivity N for between the antennas because the effect isn't that significant. Instead, the change in weather experienced by the array over the course of a night will have a much bigger affect on refractivity and phase stability.
+	Ultimately, the differences in refractivity between antennas are likely less significant than the changes experienced across the array over the course of a night. Therefore, the antenna-to-antenna differences are also likely to have less of an affect on phase stability.
 </p>
